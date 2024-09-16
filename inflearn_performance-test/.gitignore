@@ -1,0 +1,97 @@
+# =============================
+# IntelliJ IDEA
+# =============================
+
+# User-specific files
+.idea/
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/dictionaries
+.idea/shelf
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Log files
+.idea/log.xml
+.idea/misc.xml
+
+# Other IntelliJ files
+*.iml
+*.ipr
+*.iws
+out/
+target/
+build/
+
+# =============================
+# Java
+# =============================
+
+# Compiled class files
+*.class
+
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# =============================
+# Maven
+# =============================
+
+# Maven build directory
+/target/
+
+# =============================
+# Gradle
+# =============================
+
+# Gradle build directory
+/build/
+
+# =============================
+# Spring Boot
+# =============================
+
+# Spring Boot specific files (optional)
+/spring-boot-*.properties
+/spring-boot-*.yml
+
+# =============================
+# Other
+# =============================
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+
+# Package distribution
+*.jar
+*.war
+*.ear
+
+# Environment variables
+.env
+.env.*
+
+# =============================
+# Optional: Additional Tools
+# =============================
+
+# Lombok generated files
+/lombok.config
+
+# Coverage reports
+/coverage/
+/jacoco.exec
+
+# =============================
+# End of .gitignore
+# =============================
