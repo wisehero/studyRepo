@@ -1,10 +1,9 @@
-package wisehero.springadvanced.app.v4.v3;
+package wisehero.springadvanced.app.v4;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-import wisehero.springadvanced.trace.TraceStatus;
 import wisehero.springadvanced.trace.logtrace.LogTrace;
 import wisehero.springadvanced.trace.template.AbstractTemplate;
 

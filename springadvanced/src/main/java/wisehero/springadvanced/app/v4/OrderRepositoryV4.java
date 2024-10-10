@@ -1,9 +1,8 @@
-package wisehero.springadvanced.app.v4.v3;
+package wisehero.springadvanced.app.v4;
 
 import org.springframework.stereotype.Repository;
 
 import lombok.RequiredArgsConstructor;
-import wisehero.springadvanced.trace.TraceStatus;
 import wisehero.springadvanced.trace.logtrace.LogTrace;
 import wisehero.springadvanced.trace.template.AbstractTemplate;
 
