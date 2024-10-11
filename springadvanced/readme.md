@@ -44,4 +44,24 @@ public interface InvocationHandler {
 - Method method : 메서드 정보
 - Object[] args : 메서드의 매개변수
 
+### CGLIB : Code Generator Library
+
+CGLIB는 바이트코드를 조작해서 동적으로 클래스를 생성하는 기술을 제공하는 라이브러리다. JDK 동적 프록시와는 달리
+인터페이스가 없어도 구체 클래스만 가지고 동적 프록시를 만들어낼 수 있다. 원래는 외부 라이브러리인데, 스프링에 포함되었다.
+개발자가 스프링을 사용하면서 CGLIB를 직접 사용하는 경우는 없다.
+
+```java
+package org.springframework.cglib.proxy;
+
+public interface MethodInterceptor extends Callback {
+	Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable;
+}
+```
+- obj : CGLIB가 적용된 객체
+- method : 호출된 메서드
+- args : 메서드를 호출하면서 전달된 인수
+- proxy : 메서드 호출에 사용
+
+CGLIB를 사용할 때는 기본 생성자가 있는지 체크해야하고 클래스와 메서드에 final 키워드가 있는지 확인해야 한다.
+final 키워드가 있는 메서드는 오버라이드할 수 없기 때문이다. 클래스 역시 final 키워드가 있으면 상속할 수 없다.
 
