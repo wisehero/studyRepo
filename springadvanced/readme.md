@@ -32,4 +32,16 @@
 다만 JDK 동적 프록시는 인터페이스를 기반으로 프록시를 동적으로 만들어주기 때문에 인터페이스가 필수다.
 과거에 스프링이 스프링 빈을 등록할 때 인터페이스를 강제했던 것은 이런 이유 때문이다.
 
+```java
+package java.lang.reflect;
+
+public interface InvocationHandler {
+  public Object invoke(Object proxy, Method method, Object[] args) throws Throwable;
+}
+```
+
+- Object proxy : 프록시 객체 자신
+- Method method : 메서드 정보
+- Object[] args : 메서드의 매개변수
+
 
