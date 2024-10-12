@@ -1,6 +1,6 @@
 package wisehero.springadvanced.proxy.common;
 
-public interface ServerInterface {
+public interface ServiceInterface {
 
 	void save();
 

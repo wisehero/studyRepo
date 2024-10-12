@@ -1,18 +1,21 @@
 ### 프록시 패턴과 데코레이터 패턴
 
 프록시 패턴은 접근 제어가 목적이다.
+
 - 권한에 따라 접근을 차단하거나
 - 캐싱을 하거나
 - 지연 로딩을 하는데 사용할 수 있다.
 
 데코레이터 패턴은 부가 기능을 추가하는 것이 목적이다.
+
 - 원래 서버가 제공하는 기능에 부가 기능을 더할 수 있다.
-  - 예를 들면 요청 값이나, 응답 값을 중간에 변형하거나
-  - 실행 시간을 측정해서 추가 로그를 남길 수 있다.
+    - 예를 들면 요청 값이나, 응답 값을 중간에 변형하거나
+    - 실행 시간을 측정해서 추가 로그를 남길 수 있다.
 
 둘 다 프록시를 사용한다는 점은 동일하나, 의도가 다르다.
 
 ---
+
 ### 리플렉션
 
 자바가 기본적으로 제공하는 JDK 동적 프록시 기술이나 CGLIB 같은 프록시 생성 오픈소스 기술을 활용하면
@@ -36,7 +39,7 @@
 package java.lang.reflect;
 
 public interface InvocationHandler {
-  public Object invoke(Object proxy, Method method, Object[] args) throws Throwable;
+	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable;
 }
 ```
 
@@ -57,11 +60,42 @@ public interface MethodInterceptor extends Callback {
 	Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable;
 }
 ```
+
 - obj : CGLIB가 적용된 객체
 - method : 호출된 메서드
 - args : 메서드를 호출하면서 전달된 인수
 - proxy : 메서드 호출에 사용
 
-CGLIB를 사용할 때는 기본 생성자가 있는지 체크해야하고 클래스와 메서드에 final 키워드가 있는지 확인해야 한다.
-final 키워드가 있는 메서드는 오버라이드할 수 없기 때문이다. 클래스 역시 final 키워드가 있으면 상속할 수 없다.
+CGLIB를 사용할 때는 기본 생성자가 있는지 체크해야하고 클래스와 메서드에 ```final``` 키워드가 있는지 확인해야 한다.
+```final``` 키워드가 있는 메서드는 오버라이드할 수 없기 때문이다. 클래스 역시 ```final``` 키워드가 있으면 상속할 수 없다.
+
+---
+
+## 스프링이 지원하는 프록시
+
+### 프록시 팩토리
+
+인터페이스가 있으면 JDK 동적 프록시를 적용하고 그렇지 않으면 CGLIB를 적용할 수 있는 것을 알게 되었다.  
+만약 두 가지를 함께 사용해야 한다면 ```InvocationHandler```와 ```MethodInterceptor```를 모두 구현하면 된다. 하지만 이러한 중복을
+피하고 싶을 수도 있다.  
+그러면 특정 조건에 따라 프록시 로직을 적용하는 기능도 공통으로 적용되었으면 하는 마음도 있을 것이다.
+
+스프링은 동적 프록시를 통합해서 편리하게 만들어주는 프록시 팩토리 기능을 제공한다. 앞서 말한 두 가지 프록시를 함께 사용하는 경우에도  
+프록시 팩토리를 사용해서 편리하게 동적으로 프록시를 생성할 수 있다. 프록시 팩토리는 인터페이스가 있으면 JDK 동적 프록시를 사용하고  
+구체 클래스만 있다면 CGLIB를 사용한다. 그리고 이 설정을 변경할 수도 있다.
+
+프록시 팩토리는 ```InvocationHandler```와 ```MethodInterceptor```를 직접 구현하지 않고 Advice라는 새로운 개념을 사용한다.  
+따라서 개발자는 ``Advice``만 구현하면 된다. 그러면 ```InvocationHandler```와 ```MethodInterceptor```는 ```Adivce```를 호출하게 된다.
+
+앞서 인터페이스는 JDK 동적 프록시를 사용하고 구체 클래스는 CGLIB를 사용한다고 했다. 
+
+하지만 프록시 팩토리 코드에
+
+```java
+proxyFactory.setProxyTargetClass(true);
+```
+
+이런 코드를 추가하면 CGLIB를 강제로 사용할 수 있다. 이렇게 하면 인터페이스가 있어도 CGLIB를 사용한다.  
+스프링 부트는 AOP를 적용할 때 기본적으로 proxyTargetClass를 true로 설정한다. 따라서 인터페이스가 있어도  
+항상 CGLIB을 사용해서 구체 클래스를 기반으로 프록시를 생성한다.
 
