@@ -7,13 +7,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import wisehero.practicaltesting.domain.BaseEntity;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Product {
+public class Product extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,4 +32,14 @@ public class Product {
 	private String name;
 
 	private int price;
+
+	@Builder
+	private Product(String productNumber, ProductType type, ProductSellingStatus sellingStatus, String name,
+		int price) {
+		this.productNumber = productNumber;
+		this.type = type;
+		this.sellingStatus = sellingStatus;
+		this.name = name;
+		this.price = price;
+	}
 }
