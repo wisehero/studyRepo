@@ -6,6 +6,7 @@ import static wisehero.practicaltesting.domain.product.ProductType.*;
 
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,16 @@ class ProductRepositoryTest {
 
 	@Autowired
 	private ProductRepository productRepository;
+
+	@AfterEach
+	void tearDown() {
+		productRepository.deleteAllInBatch();
+	}
+
+	@Test
+	void te() {
+		productRepository.deleteAllInBatch();
+	}
 
 	@DisplayName("원하는 판매상태를 가진 상품들을 조회한다.")
 	@Test
