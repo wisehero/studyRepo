@@ -12,4 +12,16 @@ public class MailSendClient {
 		log.info("Send mail from {} to {} with subject {} and content {}", fromMail, toEmail, subject, content);
 		throw new IllegalArgumentException("메일 전송");
 	}
+
+	public void a() {
+		log.info("a");
+	}
+
+	public void b() {
+		log.info("b");
+	}
+
+	public void c() {
+		log.info("c");
+	}
 }
