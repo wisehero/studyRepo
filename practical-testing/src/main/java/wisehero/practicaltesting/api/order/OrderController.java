@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import wisehero.practicaltesting.api.ApiResponse;
 import wisehero.practicaltesting.api.order.request.OrderCreateRequest;
 import wisehero.practicaltesting.api.order.response.OrderResponse;
 import wisehero.practicaltesting.application.order.OrderService;
@@ -18,8 +19,8 @@ public class OrderController {
 	private final OrderService orderService;
 
 	@PostMapping("/api/v1/orders/new")
-	public OrderResponse createOrder(@RequestBody OrderCreateRequest request) {
+	public ApiResponse<OrderResponse> createOrder(@RequestBody OrderCreateRequest request) {
 		LocalDateTime registeredDateTime = LocalDateTime.now();
-		return orderService.createOrder(request, registeredDateTime);
+		return ApiResponse.ok(orderService.createOrder(request, registeredDateTime));
 	}
 }

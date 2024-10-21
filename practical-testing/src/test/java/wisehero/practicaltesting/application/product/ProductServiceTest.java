@@ -17,6 +17,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import wisehero.practicaltesting.api.product.request.ProductCreateRequest;
 import wisehero.practicaltesting.api.product.response.ProductResponse;
+import wisehero.practicaltesting.application.product.request.ProductCreateServiceRequest;
 import wisehero.practicaltesting.domain.product.Product;
 import wisehero.practicaltesting.domain.product.ProductRepository;
 import wisehero.practicaltesting.domain.product.ProductSellingStatus;
@@ -44,7 +45,7 @@ class ProductServiceTest {
 		Product product = createProduct("001", HANDMADE, SELLING, "아메리카노", 4000);
 		productRepository.save(product);
 
-		ProductCreateRequest request = ProductCreateRequest.builder()
+		ProductCreateServiceRequest request = ProductCreateServiceRequest.builder()
 			.type(HANDMADE)
 			.sellingStatus(SELLING)
 			.name("카푸치노")
@@ -72,7 +73,7 @@ class ProductServiceTest {
 	@DisplayName("상품이 하나도 없는 경우 신규 상품을 등록하면 상품번호는 001이다.")
 	void createProductWhenProductIsEmpty() {
 		// given
-		ProductCreateRequest request = ProductCreateRequest.builder()
+		ProductCreateServiceRequest request = ProductCreateServiceRequest.builder()
 			.type(HANDMADE)
 			.sellingStatus(SELLING)
 			.name("카푸치노")

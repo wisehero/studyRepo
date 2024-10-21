@@ -43,8 +43,9 @@ class OrderServiceTest {
 	@AfterEach
 	void tearDown() {
 		orderProductRepository.deleteAllInBatch();
-		orderRepository.deleteAllInBatch();
 		productRepository.deleteAllInBatch();
+		orderRepository.deleteAllInBatch();
+		stockRepository.deleteAllInBatch();
 	}
 
 	@Test

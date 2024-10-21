@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import wisehero.practicaltesting.api.product.request.ProductCreateRequest;
 import wisehero.practicaltesting.api.product.response.ProductResponse;
+import wisehero.practicaltesting.application.product.request.ProductCreateServiceRequest;
 import wisehero.practicaltesting.domain.product.Product;
 import wisehero.practicaltesting.domain.product.ProductRepository;
 import wisehero.practicaltesting.domain.product.ProductSellingStatus;
@@ -30,7 +31,7 @@ public class ProductService {
 	}
 
 	@Transactional
-	public ProductResponse createProduct(ProductCreateRequest request) {
+	public ProductResponse createProduct(ProductCreateServiceRequest request) {
 		String nextProductNumber = createNextProductNumber();
 
 		Product product = request.toEntity(nextProductNumber);
