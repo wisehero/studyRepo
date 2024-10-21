@@ -10,7 +10,7 @@ public record ProductResponse(
 	Long id,
 	String productNumber,
 	ProductType type,
-	ProductSellingStatus sellingType,
+	ProductSellingStatus sellingStatus,
 	String name,
 	int price
 ) {
