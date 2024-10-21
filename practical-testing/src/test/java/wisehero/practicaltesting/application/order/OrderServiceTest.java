@@ -15,6 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import wisehero.practicaltesting.api.order.request.OrderCreateRequest;
 import wisehero.practicaltesting.api.order.response.OrderResponse;
+import wisehero.practicaltesting.application.order.request.OrderCreateServiceRequest;
 import wisehero.practicaltesting.domain.order.OrderRepository;
 import wisehero.practicaltesting.domain.orderproduct.OrderProductRepository;
 import wisehero.practicaltesting.domain.product.Product;
@@ -59,8 +60,8 @@ class OrderServiceTest {
 		Product product3 = createProduct(HANDMADE, "003", 5000);
 		productRepository.saveAll(List.of(product1, product2, product3));
 
-		OrderCreateRequest request = OrderCreateRequest.builder()
-			.productsNumbers(List.of("001", "002"))
+		OrderCreateServiceRequest request = OrderCreateServiceRequest.builder()
+			.productNumbers(List.of("001", "002"))
 			.build();
 
 		// when
@@ -93,8 +94,8 @@ class OrderServiceTest {
 		Product product3 = createProduct(HANDMADE, "003", 5000);
 		productRepository.saveAll(List.of(product1, product2, product3));
 
-		OrderCreateRequest request = OrderCreateRequest.builder()
-			.productsNumbers(List.of("001", "001"))
+		OrderCreateServiceRequest request = OrderCreateServiceRequest.builder()
+			.productNumbers(List.of("001", "001"))
 			.build();
 
 		// when
@@ -131,8 +132,8 @@ class OrderServiceTest {
 		Stock stock2 = Stock.create("002", 2);
 		stockRepository.saveAll(List.of(stock1, stock2));
 
-		OrderCreateRequest request = OrderCreateRequest.builder()
-			.productsNumbers(List.of("001", "001", "002", "003"))
+		OrderCreateServiceRequest request = OrderCreateServiceRequest.builder()
+			.productNumbers(List.of("001", "001", "002", "003"))
 			.build();
 
 		// when
@@ -168,8 +169,8 @@ class OrderServiceTest {
 		stock1.decreaseQuantity(1); // todo
 		stockRepository.saveAll(List.of(stock1, stock2));
 
-		OrderCreateRequest request = OrderCreateRequest.builder()
-			.productsNumbers(List.of("001", "001", "002", "003"))
+		OrderCreateServiceRequest request = OrderCreateServiceRequest.builder()
+			.productNumbers(List.of("001", "001", "002", "003"))
 			.build();
 
 		// when then

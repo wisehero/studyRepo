@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import wisehero.practicaltesting.api.order.request.OrderCreateRequest;
 import wisehero.practicaltesting.api.order.response.OrderResponse;
+import wisehero.practicaltesting.application.order.request.OrderCreateServiceRequest;
 import wisehero.practicaltesting.domain.order.Order;
 import wisehero.practicaltesting.domain.order.OrderRepository;
 import wisehero.practicaltesting.domain.product.Product;
@@ -29,8 +30,8 @@ public class OrderService {
 	private final OrderRepository orderRepository;
 	private final StockRepository stockRepository;
 
-	public OrderResponse createOrder(OrderCreateRequest request, LocalDateTime registeredDateTime) {
-		List<String> productNumbers = request.productsNumbers();
+	public OrderResponse createOrder(OrderCreateServiceRequest request, LocalDateTime registeredDateTime) {
+		List<String> productNumbers = request.productNumbers();
 		List<Product> products = findProductsBy(productNumbers);
 
 		decreaseStockQuantity(products);
