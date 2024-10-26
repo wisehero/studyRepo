@@ -5,11 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
-import wisehero.springadvanced.proxy.config.v3_proxyfacotry.ProxyFactoryConfigV1;
+import wisehero.springadvanced.proxy.config.v3_proxyfacotry.ProxyFactoryConfigV2;
 import wisehero.springadvanced.proxy.trace.logtrace.LogTrace;
 import wisehero.springadvanced.proxy.trace.logtrace.ThreadLocalLogTrace;
 
-@Import(ProxyFactoryConfigV1.class)
+@Import(ProxyFactoryConfigV2.class)
 @SpringBootApplication(scanBasePackages = "wisehero.springadvanced.proxy.app.v1")
 public class SpringadvancedApplication {
 
