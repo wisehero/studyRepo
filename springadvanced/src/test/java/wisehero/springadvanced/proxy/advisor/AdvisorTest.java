@@ -9,6 +9,7 @@ import org.springframework.aop.MethodMatcher;
 import org.springframework.aop.Pointcut;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
+import org.springframework.aop.support.NameMatchMethodPointcut;
 
 import lombok.extern.slf4j.Slf4j;
 import wisehero.springadvanced.proxy.common.ServiceInterface;
@@ -82,5 +83,20 @@ public class AdvisorTest {
 		public boolean matches(Method method, Class<?> targetClass, Object... args) {
 			throw new UnsupportedOperationException();
 		}
+	}
+
+	@Test
+	@DisplayName("스프링이 제공하는 포인트컷")
+	void advisorTest3() {
+		ServiceImpl target = new ServiceImpl();
+		ProxyFactory proxyFactory = new ProxyFactory(target);
+		NameMatchMethodPointcut pointcut = new NameMatchMethodPointcut(); // 메서드 이름과 매칭하는 객체 생성 스프링이 제공함
+		pointcut.setMappedNames("save");
+		DefaultPointcutAdvisor advisor = new DefaultPointcutAdvisor(pointcut, new TimeAdvice());
+		proxyFactory.addAdvisor(advisor);
+		ServiceInterface proxy = (ServiceInterface)proxyFactory.getProxy();
+
+		proxy.save();
+		proxy.find();
 	}
 }
