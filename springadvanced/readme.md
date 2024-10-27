@@ -130,6 +130,26 @@ proxyFactory.setProxyTargetClass(true);
 그런데 빈 저장소에 등록하기 전에 빈을 조작하고 싶다면 빈 후처리기를 사용한다. 빈 후처리기는 객체 조작뿐만 아니라  
 객체를 다른 객체로 바꿔치기하는 것도 가능하다.
 
+스프링 부트에서는 자동 설정으로 `AnnotationAwareAspectJAutoProxyCreator`라는 빈 후처리기가 스프링 빈에 자동으로  
+등록된다. 이름 그대로 자동으로 프록시를 생성해주는 빈 후처리기다. 동작 순서는 다음과 같다.
 
+1. 스프링이 스프링 빈 대상이되는 객체를 생성한다.
+2. 생성된 객체를 빈 저장소에 등록하기 직전에 빈 후처리기에 전달한다.
+3. 빈 후처리기는 스프링 컨테이너에서 모든 Advisor를 조회한다.
+4. Advisor에 포함되어 있는 포인트컷을 사용해서 해당 객체가 프록시를 적용할 대상인지 아닌지를 판단한다.
+5. 프록시 적용 대상이면 프록시를 생성하고 반환해서 프록시를 스프링 빈으로 등록한다.
+6. 반환된 객체는 스프링 빈으로 등록된다.
 
+프록시는 모든 곳에 만들어서는 안된다. 이것은 비용 낭비다. 꼭 필요한 곳에 최소한의 프록시를 적용해야 한다. 그래서  
+프록시를 적용할 때 매우 정밀하게 포인트컷을 설정해야 한다. 이것을 도와주는 것이 `AspectJExpressionPointcut`이다.  
 
+```java
+@Bean
+public Advisor advisor3(LogTrace logTrace) {
+    AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
+    pointcut.setExpression("execution(* hello.proxy.app..*(..)) && !execution(* hello.proxy.app..noLog(..))");
+    LogTraceAdvice advice = new LogTraceAdvice(logTrace);
+    //advisor = pointcut + advice
+    return new DefaultPointcutAdvisor(pointcut, advice);
+}
+```
