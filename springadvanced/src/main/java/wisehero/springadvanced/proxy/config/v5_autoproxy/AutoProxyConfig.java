@@ -17,10 +17,18 @@ import wisehero.springadvanced.proxy.trace.logtrace.LogTrace;
 @Import({AppV1Config.class, AppV2Config.class})
 public class AutoProxyConfig {
 
+	// @Bean
+	// public Advisor advisor1(LogTrace logTrace) {
+	// 	NameMatchMethodPointcut pointcut = new NameMatchMethodPointcut();
+	// 	pointcut.setMappedNames("request*", "order*", "save*");
+	// 	LogTraceAdvice advice = new LogTraceAdvice(logTrace);
+	// 	return new DefaultPointcutAdvisor(pointcut, advice);
+	// }
+
 	@Bean
-	public Advisor advisor1(LogTrace logTrace) {
-		NameMatchMethodPointcut pointcut = new NameMatchMethodPointcut();
-		pointcut.setMappedNames("request*", "order*", "save*");
+	public Advisor advisor2(LogTrace logTrace) {
+		AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
+		pointcut.setExpression("execution(* wisehero.springadvanced.proxy.app..*(..))");
 		LogTraceAdvice advice = new LogTraceAdvice(logTrace);
 		return new DefaultPointcutAdvisor(pointcut, advice);
 	}
