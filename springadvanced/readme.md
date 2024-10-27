@@ -141,15 +141,119 @@ proxyFactory.setProxyTargetClass(true);
 6. 반환된 객체는 스프링 빈으로 등록된다.
 
 프록시는 모든 곳에 만들어서는 안된다. 이것은 비용 낭비다. 꼭 필요한 곳에 최소한의 프록시를 적용해야 한다. 그래서  
-프록시를 적용할 때 매우 정밀하게 포인트컷을 설정해야 한다. 이것을 도와주는 것이 `AspectJExpressionPointcut`이다.  
+프록시를 적용할 때 매우 정밀하게 포인트컷을 설정해야 한다. 이것을 도와주는 것이 `AspectJExpressionPointcut`이다.
 
 ```java
+
 @Bean
 public Advisor advisor3(LogTrace logTrace) {
-    AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
-    pointcut.setExpression("execution(* hello.proxy.app..*(..)) && !execution(* hello.proxy.app..noLog(..))");
-    LogTraceAdvice advice = new LogTraceAdvice(logTrace);
-    //advisor = pointcut + advice
-    return new DefaultPointcutAdvisor(pointcut, advice);
+	AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
+	pointcut.setExpression("execution(* hello.proxy.app..*(..)) && !execution(* hello.proxy.app..noLog(..))");
+	LogTraceAdvice advice = new LogTraceAdvice(logTrace);
+	//advisor = pointcut + advice
+	return new DefaultPointcutAdvisor(pointcut, advice);
 }
 ```
+
+---
+
+## @Aspect
+
+위에서 살펴본 바와 같이 스프링 애플리케이션에 프록시를 적용하려면 포인트컷과 어드바이스로 구성되어 있는 어드바이저를  
+만들어서 스프링 빈으로 등록하면 된다. 그러면 나머지는 앞서 배운 자동 프록시 생성기가 모두 자동으로 처리해준다.  
+스프링은 더 나아가 어드바이스와 포인트컷을 한번에 정의하고 관리할 수 있는 `@Aspect`라는 기능을 제공한다.
+
+```java
+
+@Slf4j
+@Aspect
+public class LogTraceAspect {
+
+	private final LogTrace logTrace;
+
+	public LogTraceAspect(LogTrace logTrace) {
+		this.logTrace = logTrace;
+	}
+
+	@Around("execution(* wisehero.springadvanced.proxy.app..*(..))")
+	public Object execute(ProceedingJoinPoint joinPoint) throws Throwable {
+
+		TraceStatus status = null;
+		try {
+			String message = joinPoint.getSignature().toShortString();
+			status = logTrace.begin(message);
+
+			Object result = joinPoint.proceed();
+
+			logTrace.end(status);
+			return result;
+		} catch (Exception e) {
+			logTrace.exception(status, e);
+			throw e;
+		}
+	}
+}
+```
+
+`@Aspect`는 애노테이션 기반 프록시를 적용할때 필요하다. 자동 프록시 생성기는 `@Aspect`를 찾아서 Advisor로 만들어준다.  
+과정음 다음과 같다.
+
+1. 스프링 애플리케이션 로딩 시점에 자동 프록시 생성기를 호출한다.
+2. 모든 `@Aspect`를 찾아서 Advisor로 만든다.
+3. 생성한 어드바이저를 `@Aspect`어드바이저 빌더 내부에 저장한다.
+
+여기서 말하는 `@Aspect`어드바이저 빌더는 `BeanFactoryAspectJAdvisorsBuilder` 클래스를 의미한다. 이 클래스는  
+`@Aspect`의 정보를 기반으로 포인트컷, 어드바이스, 어드바이저를 생성하고 보관하는 것을 담당한다. 내부적으로 캐시도 가지고 있어서  
+이미 만들어져 있는 경우 캐시에 저장된 어드바이저를 반환한다. 이렇게 만든 어드바이저를 자동 프록시 생성기가 조회한다.  
+그리고 적용 대상인 어드바이저를 찾으면 프록시를 적용한 뒤에 프록시를 생성하고 스프링 빈으로 등록한다. 만약 프록시 적용  
+대상 객체가 아니라면 원본 객체를 반환해서 스프링 빈으로 등록한다.
+
+--- 
+
+## 스프링 AOP
+
+### 부가 기능 적용의 문제
+
+기능은 핵심 기능과 부가 기능으로 나눌 수 있다. 핵심 기능이란 주문 서비스의 경우 상품 주문 로직이 핵심 기능이고 이외에  
+로그를 남기거나 트랜잭션을 관리하는 기능들은 부가 기능이다. 그리고 이 부가 기능은 주문 서비스뿐만 아니라 다른 서비스에서  
+사용될 수도 있다. 그럼 이 부가 기능을 적용하려면 모든 클래스에서 부가 기능을 작성해주면 된다. 하지만 이 방식은 너무 품이 많이 든다.  
+아주 많은 반복이 필요하고, 중복 코드를 만들어내며 부가 기능의 변경이 생기면 많은 수정이 필요하다.
+
+**소프트웨어 개발에서 변경 지점은 하나가 될 수 있도록 잘 모듈화 되어야 한다.**
+
+### 애스펙트
+
+그렇다면 부가 기능을 어떻게 모듈화할 수 있을까? 이때 사용하는 것이 애스펙트다. 애스펙트는 부가 기능을 모듈화한 것이다.  
+애스펙트의 사용으로 인해서 부가 기능을 한 곳에서 관리할 수 있게 되었고 이러한 프로그래밍을 관점 지향 프로그래밍이라고 한다.  
+AOP는 OOP를 대체하기 위해서 등장한 반대의 패러다임과 같은 개념이 아닌, OOP를 보완하는 개념이다. 부가 기능을 따로 분리함으로써  
+객체가 자신의 주요 목적, 주요 비즈니스 로직에만 집중할 수 있도록 도와주기 때문이다.
+
+### AOP 적용 방식
+
+AOP를 사용할 때 부가 기능 로직은 어떻게 실제 로직에 추가될까? 크게 3가지 방법이 있다.
+
+1. 컴파일 시점에 코드에 부가 기능을 추가하는 방법
+2. 클래스 로딩 시점에 코드에 부가 기능을 추가하는 방법
+3. 런타임 시점
+
+컴파일 시점에는 AspectJ가 제공하는 특별한 컴파일러를 사용해서 `.java` 코드를 `.class`로 변환할 때 부가 기능을 추가한다.  
+이 방식의 단점은 부가 기능을 적용하기 위해 특별한 컴파일러가 필요하다는 점이다.
+
+클래스 로딩시점에 적용하는 방식은 클래스 로더에 등록되기 전에 `.class` 파일을 조작해서 JVM에 올린다. 참고로 수많은 모니터링  
+툴들이 이 방식을 사용한다. 이 방식을 로드 타임 위빙이라고 하는데 자바를 실행할 때 특별한 옵션을 주어서 사용한다.
+
+```java
+java -javaagent
+```
+
+마지막으로 런타임 시점에 적용하는 AOP는 프록시를 통해 부가 기능을 적용하는 방식이다. 따라서 항상 프록시를 통해 부가 기능을  
+사용할 수 있다. 스프링 AOP는 이 방식을 사용한다. 이 방식은 AOP의 적용 포인트를 메서드 실행으로 제한하고, 해당 메서드가 작성된  
+클래스는 스프링 빈으로 등록되어야 한다. 즉, 프록시 방시을 사용하는 스프링 AOP는 스프링 컨테이너가 관리할 수 있는 스프링 빈에만  
+AOP를 적용할 수 있다.
+
+기억해두어야할 점은, 스프링은 AspectJ의 문법만 차용하고 프록시 방식의 AOP를 적용하는 것이다. AspectJ를 직접 사용하지 않는다.  
+또한 스프링 AOP의 조인 포인트는 메서드로 제한된다. 즉, 메서드 실행 시점에만 부가 기능을 적용할 수 있다.  
+static 메서드나 생성자, 필드 값 접근에는 프록시 개념이 적용될 수 없다.
+
+
+
