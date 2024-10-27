@@ -1,5 +1,10 @@
 package wisehero.springadvanced.proxy.config.v2_dynamicproxy;
 
+import java.lang.reflect.Proxy;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 import wisehero.springadvanced.proxy.app.v1.OrderControllerV1;
 import wisehero.springadvanced.proxy.app.v1.OrderControllerV1Impl;
 import wisehero.springadvanced.proxy.app.v1.OrderRepositoryV1;
@@ -8,11 +13,6 @@ import wisehero.springadvanced.proxy.app.v1.OrderServiceV1;
 import wisehero.springadvanced.proxy.app.v1.OrderServiceV1Impl;
 import wisehero.springadvanced.proxy.config.v2_dynamicproxy.handler.LogTraceBasicHandler;
 import wisehero.springadvanced.proxy.trace.logtrace.LogTrace;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-import java.lang.reflect.Proxy;
 
 @Configuration
 public class DynamicProxyBasicConfig {

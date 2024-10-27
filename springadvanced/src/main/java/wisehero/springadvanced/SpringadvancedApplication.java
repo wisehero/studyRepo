@@ -5,12 +5,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
-import wisehero.springadvanced.proxy.config.v2_dynamicproxy.DynamicProxyBasicConfig;
+import wisehero.springadvanced.proxy.config.v5_autoproxy.AutoProxyConfig;
 import wisehero.springadvanced.proxy.trace.logtrace.LogTrace;
 import wisehero.springadvanced.proxy.trace.logtrace.ThreadLocalLogTrace;
 
-@Import(DynamicProxyBasicConfig.class)
-@SpringBootApplication(scanBasePackages = "wisehero.springadvanced.proxy.app.v1")
+@Import(AutoProxyConfig.class)
+@SpringBootApplication(scanBasePackages = "wisehero.springadvanced.proxy.app")
 public class SpringadvancedApplication {
 
 	public static void main(String[] args) {

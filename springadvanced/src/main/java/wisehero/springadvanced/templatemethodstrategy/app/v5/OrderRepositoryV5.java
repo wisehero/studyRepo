@@ -2,10 +2,8 @@ package wisehero.springadvanced.templatemethodstrategy.app.v5;
 
 import org.springframework.stereotype.Repository;
 
-import lombok.RequiredArgsConstructor;
 import wisehero.springadvanced.templatemethodstrategy.trace.callback.TraceTemplate;
 import wisehero.springadvanced.templatemethodstrategy.trace.logtrace.LogTrace;
-import wisehero.springadvanced.templatemethodstrategy.trace.template.AbstractTemplate;
 
 @Repository
 public class OrderRepositoryV5 {

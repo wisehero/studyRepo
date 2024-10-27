@@ -1,7 +1,5 @@
 package wisehero.springadvanced.templatemethodstrategy.trace.logtrace;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
 
 import wisehero.springadvanced.templatemethodstrategy.trace.TraceStatus;

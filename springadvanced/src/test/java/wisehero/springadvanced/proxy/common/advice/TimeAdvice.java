@@ -1,10 +1,7 @@
 package wisehero.springadvanced.proxy.common.advice;
 
-import java.lang.reflect.Method;
-
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.springframework.cglib.proxy.MethodProxy;
 
 import lombok.extern.slf4j.Slf4j;
 

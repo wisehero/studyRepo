@@ -2,7 +2,6 @@ package wisehero.springadvanced.proxy.jdkdynamic;
 
 import java.lang.reflect.Method;
 
-import org.assertj.core.api.IterableAssert;
 import org.junit.jupiter.api.Test;
 
 import lombok.extern.slf4j.Slf4j;
