@@ -6,11 +6,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
 import wisehero.springadvanced.proxy.config.v3_proxyfacotry.ProxyFactoryConfigV2;
+import wisehero.springadvanced.proxy.config.v4_postprocessor.BeanPostProcessorConfig;
 import wisehero.springadvanced.proxy.trace.logtrace.LogTrace;
 import wisehero.springadvanced.proxy.trace.logtrace.ThreadLocalLogTrace;
 
-@Import(ProxyFactoryConfigV2.class)
-@SpringBootApplication(scanBasePackages = "wisehero.springadvanced.proxy.app.v1")
+@Import(BeanPostProcessorConfig.class)
+@SpringBootApplication(scanBasePackages = "wisehero.springadvanced.proxy.app")
 public class SpringadvancedApplication {
 
 	public static void main(String[] args) {
