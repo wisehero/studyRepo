@@ -1,7 +1,5 @@
 package wisehero.springadvanced.templatemethodstrategy.trace.logtrace;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
 
 import lombok.extern.slf4j.Slf4j;

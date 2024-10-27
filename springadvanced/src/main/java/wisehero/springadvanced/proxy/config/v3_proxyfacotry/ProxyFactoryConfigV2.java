@@ -8,12 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import lombok.extern.slf4j.Slf4j;
-import wisehero.springadvanced.proxy.app.v1.OrderControllerV1;
-import wisehero.springadvanced.proxy.app.v1.OrderControllerV1Impl;
-import wisehero.springadvanced.proxy.app.v1.OrderRepositoryV1;
-import wisehero.springadvanced.proxy.app.v1.OrderRepositoryV1Impl;
-import wisehero.springadvanced.proxy.app.v1.OrderServiceV1;
-import wisehero.springadvanced.proxy.app.v1.OrderServiceV1Impl;
 import wisehero.springadvanced.proxy.app.v2.OrderControllerV2;
 import wisehero.springadvanced.proxy.app.v2.OrderRepositoryV2;
 import wisehero.springadvanced.proxy.app.v2.OrderServiceV2;

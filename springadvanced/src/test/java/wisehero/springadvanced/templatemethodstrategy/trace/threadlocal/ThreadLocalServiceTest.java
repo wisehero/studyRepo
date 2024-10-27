@@ -3,7 +3,6 @@ package wisehero.springadvanced.templatemethodstrategy.trace.threadlocal;
 import org.junit.jupiter.api.Test;
 
 import lombok.extern.slf4j.Slf4j;
-import wisehero.springadvanced.templatemethodstrategy.trace.threadlocal.code.FieldService;
 import wisehero.springadvanced.templatemethodstrategy.trace.threadlocal.code.ThreadLocalService;
 
 @Slf4j

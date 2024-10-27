@@ -1,7 +1,5 @@
 package wisehero.springadvanced.proxy.config.v4_postprocessor.postprocessor;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.aop.Advisor;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.BeansException;
