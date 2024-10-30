@@ -11,9 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import wisehero.springaop.order.OrderRepository;
 import wisehero.springaop.order.OrderService;
 import wisehero.springaop.order.aop.AspectV3;
+import wisehero.springaop.order.aop.AspectV4PointCut;
 
 @Slf4j
-@Import(AspectV3.class)
+@Import(AspectV4PointCut.class)
 @SpringBootTest
 public class AopTest {
 
