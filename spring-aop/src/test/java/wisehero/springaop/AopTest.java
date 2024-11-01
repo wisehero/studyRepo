@@ -10,10 +10,11 @@ import org.springframework.context.annotation.Import;
 import lombok.extern.slf4j.Slf4j;
 import wisehero.springaop.order.OrderRepository;
 import wisehero.springaop.order.OrderService;
-import wisehero.springaop.order.aop.AspectV5Order;
+import wisehero.springaop.order.aop.AspectV6Advice;
 
 @Slf4j
-@Import({AspectV5Order.LogAspect.class, AspectV5Order.TxAspect.class})
+// @Import({AspectV5Order.LogAspect.class, AspectV5Order.TxAspect.class})
+@Import(AspectV6Advice.class)
 @SpringBootTest
 public class AopTest {
 
