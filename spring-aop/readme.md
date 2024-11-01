@@ -82,3 +82,17 @@ public void doThrowing(JoinPoint joinPoint, Exception ex) {
 
 ### 실행 순서(스프링 5.2.7 버전부터)
 - `@Around` -> `@Before` ->  `@After` -> `@AfterReturning` -> `@AfterThrowing`
+
+--- 
+
+## 포인트컷 
+
+### 포인트컷 지시자의 종류
+- `execution` : 메서드 실행 지점을 매칭한다. 스프링 AOP에서 가장 많이 사용하고, 기능도 복잡하다.
+- `within` : 특정 타입 내부의 메서드를 매칭한다.
+- `args` : 인자가 주어진 타입의 인스턴스인 조인 포인트
+- `this` : 스프링 빈 객체(스프링 AOP 프록시)를 대상으로 하는 조인 포인트
+- `target` : 타겟 객체(스프링 AOP 프록시가 가리키는 실제 대상)를 대상으로 하는 조인 포인트
+
+이외에도 많은 포인트컷 지시자가 있지만 execution이 가장 많이 사용된다.
+
