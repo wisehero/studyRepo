@@ -33,10 +33,12 @@
 ## 어드바이스 종류
 
 ### `@Before`
+
 ```java
+
 @Before("hello.aop.order.aop.Pointcuts.orderAndService()")
 public void doBefore(JoinPoint joinPoint) {
-    log.info("[before] {}", joinPoint.getSignature());
+	log.info("[before] {}", joinPoint.getSignature());
 }
 ```
 
@@ -44,25 +46,31 @@ public void doBefore(JoinPoint joinPoint) {
 - `@Around`와는 달리 작업 흐름을 변경할 수는 없다.
 
 ### `@AfterReturning`
+
 ```java
+
 @AfterReturning(value = "hello.aop.order.aop.Pointcuts.orderAndService()",
-returning = "result")
+	returning = "result")
 public void doReturn(JoinPoint joinPoint, Object result) {
-    log.info("[return] {} return={}", joinPoint.getSignature(), result);
+	log.info("[return] {} return={}", joinPoint.getSignature(), result);
 }
 ```
+
 - `returning` 속성에 사용된 이름은 어드바이스 메서드의 매개변수 이름과 일치해야 한다.
 - `returning` 절에 지정된 타입의 값을 반환하는 메서드만 대상으로 실행한다.
 - `@Around`와 다르게 반환되는 객체를 변경할 수는 없다. 반환 객체를 변경하려면 `@Around`를 사용해야 한다.
 
 ### `@AfterThrowing`
+
 ```java
+
 @AfterThrowing(value = "hello.aop.order.aop.Pointcuts.orderAndService()",
-throwing = "ex")
+	throwing = "ex")
 public void doThrowing(JoinPoint joinPoint, Exception ex) {
-    log.info("[ex] {} message={}", joinPoint.getSignature(), ex.getMessage());
+	log.info("[ex] {} message={}", joinPoint.getSignature(), ex.getMessage());
 }
 ```
+
 - throwing 속성에 사용된 이름은 어드바이스 메서드의 매개변수 이름과 일치해야 한다.
 - throwing 절에 지정된 타입과 맞는 예외를 대상으로 실행한다.
 
@@ -73,6 +81,7 @@ public void doThrowing(JoinPoint joinPoint, Exception ex) {
 - 일반적으로 리소스를 해제하는 데 사용한다.
 
 ### `@Around`
+
 - 메서드의 실행 주변에서 실행된다. 메서드 실행 전후에 작업을 수행한다.
 - 조인 포인트 실행 여부를 선택할 수 있다.
 - 반환 값을 변환하고 예외를 변환하는 작업도 가능하다.
@@ -81,13 +90,15 @@ public void doThrowing(JoinPoint joinPoint, Exception ex) {
 - `proceed()`를 여러번 실행할 수 있다.
 
 ### 실행 순서(스프링 5.2.7 버전부터)
+
 - `@Around` -> `@Before` ->  `@After` -> `@AfterReturning` -> `@AfterThrowing`
 
 --- 
 
-## 포인트컷 
+## 포인트컷
 
 ### 포인트컷 지시자의 종류
+
 - `execution` : 메서드 실행 지점을 매칭한다. 스프링 AOP에서 가장 많이 사용하고, 기능도 복잡하다.
 - `within` : 특정 타입 내부의 메서드를 매칭한다. within은 부모 타입은 사용하면 안된다.(추상 클래스, 인터페이스 X)
 - `args` : 인자가 주어진 타입의 인스턴스인 조인 포인트
@@ -101,12 +112,13 @@ public void doThrowing(JoinPoint joinPoint, Exception ex) {
 ## 스프링 AOP 실무 주의사항
 
 ### 프록시 내부 호출 문제
+
 스프링은 프록시 방식의 AOP를 사용한다. 따라서 AOP를 적용하려면 항상 프록시를 통해서 대상 객체를 호출해야 한다.  
-만약 프록시를 거치지 않고 대상 객체를 직접 호출하게 되면 AOP가 적용되지 않고, 어드바이스도 호출되지 않는다.  
+만약 프록시를 거치지 않고 대상 객체를 직접 호출하게 되면 AOP가 적용되지 않고, 어드바이스도 호출되지 않는다.
 
 AOP를 적용하면 스프링은 대상 객체 대신에 프록시를 스프링 빈으로 등록한다. 따라서 스프링은 의존관계 주입시에 항상  
 프록시 객체를 주입한다. 프록시 객체가 주입되기 때문에 대상 객체를 직접 호출하는 문제는 일반적으로 발생하지 않는다.  
-하지만 대상 객체의 내부에서 메서드 호출이 발생하면 프록시를 거치지 않고 대상 객체를 직접 호출하는 문제가 발생한다.  
+하지만 대상 객체의 내부에서 메서드 호출이 발생하면 프록시를 거치지 않고 대상 객체를 직접 호출하는 문제가 발생한다.
 
 ### 프록시 내부 호출 문제의 대안
 
@@ -114,6 +126,28 @@ AOP를 적용하면 스프링은 대상 객체 대신에 프록시를 스프링 
 가장 추천되는 방법이다.
 
 참고로 AOP는 주로 트랜잭션 적용이나 주요 컴포넌트의 로그 출력 기능에 사용된다. 쉽게 이야기해서 인터페이스에  
-메서드가 나올 정도의 규모에 AOP를 적용하는 것이 적당하다. 
+메서드가 나올 정도의 규모에 AOP를 적용하는 것이 적당하다.
 
+--- 
 
+## 프록시 기술의 한계
+
+### 타입 캐스팅
+
+- JDK 동적 프록시는 인터페이스 기반의 프록시만 생성할 수 있다. 구체 타입으로 캐스팅이 불가능하다.
+- CGLIB은 클래스 기반의 프록시를 생성할 수 있다. 구체 타입으로 캐스팅이 가능하다.
+
+### 의존관계 주입
+
+- JDK 동적 프록시는 대상 객체인 구체 클래스에 의존관계를 주입할 수 없다.
+- CGLIB 프록시는 대상 객체인 구체 클래스에 의존 관계를 주입할 수 있다.
+
+### CGLIB의 단점
+
+- 대상 클래스에 기본 생성자 필수
+- 생성자 2번 호출(부모 한번, 자신의 것 한번)
+- `final` 메서드, `final` 클래스, `private` 메서드에는 적용할 수 없다.
+
+하지만 CGLIB의 문제점 중 1,2번은 스프링부트 2.0 들어와서 전부 해결되었고, 프록시 생성의 기본 방식으로 채택되었다.
+
+---
