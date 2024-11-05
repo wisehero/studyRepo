@@ -1,7 +1,10 @@
-package io.member;
+package io.member.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.member.Member;
+import io.member.MemberRepository;
 
 public class MemoryMemberRepository implements MemberRepository {
 
