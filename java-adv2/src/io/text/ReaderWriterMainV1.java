@@ -6,7 +6,6 @@ import static java.nio.charset.StandardCharsets.*;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class ReaderWriterMainV1 {
