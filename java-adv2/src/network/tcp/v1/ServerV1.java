@@ -2,7 +2,6 @@ package network.tcp.v1;
 
 import static util.MyLogger.*;
 
-import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;

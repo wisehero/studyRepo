@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import network.tcp.v4.SessionV4;
-
 public class ServerV5 {
 
 	private static final int PORT = 12345;

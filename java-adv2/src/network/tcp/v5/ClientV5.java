@@ -1,6 +1,5 @@
 package network.tcp.v5;
 
-import static network.tcp.SocketCloseUtil.*;
 import static util.MyLogger.*;
 
 import java.io.DataInputStream;
