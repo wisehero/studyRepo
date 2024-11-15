@@ -25,7 +25,6 @@ public class WriteHandler implements Runnable {
 	public void run() {
 		Scanner scanner = new Scanner(System.in);
 		try {
-			System.out.println("이름을 입력하세요.");
 			String username = inputUsername(scanner);
 			output.writeUTF("/join" + DELEMETER + username);
 
