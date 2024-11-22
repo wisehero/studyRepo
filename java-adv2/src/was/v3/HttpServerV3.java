@@ -8,8 +8,6 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import was.v2.HttpRequestHandlerV2;
-
 public class HttpServerV3 {
 
 	private final ExecutorService es = Executors.newFixedThreadPool(10); // 동시에 10개 스레드 사용

@@ -1,6 +1,5 @@
 package was.v8;
 
-import was.httpserver.HttpRequest;
 import was.httpserver.HttpResponse;
 import was.httpserver.annotation.Mapping;
 

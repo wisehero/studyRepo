@@ -2,8 +2,6 @@ package was.v3;
 
 import java.io.IOException;
 
-import was.v2.HttpServerV2;
-
 public class ServerMainV3 {
 
 	private static final int PORT = 12345;

@@ -6,12 +6,8 @@ import java.util.List;
 import was.httpserver.HttpServer;
 import was.httpserver.HttpServlet;
 import was.httpserver.ServletManager;
-import was.httpserver.annotation.AnnotationServletV1;
-import was.httpserver.annotation.AnnotationServletV2;
 import was.httpserver.annotation.AnnotationServletV3;
 import was.v5.servlet.DiscardServlet;
-import was.v7.SearchControllerV7;
-import was.v7.SiteControllerV7;
 
 public class ServerMainV8 {
 
