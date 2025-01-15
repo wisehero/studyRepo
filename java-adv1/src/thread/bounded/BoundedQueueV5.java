@@ -8,6 +8,9 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import static util.MyLogger.log;
 
+/**
+ * 서로 다른 스레드 대기 공간을 두어 생산자가 소비자를 깨우고 소비자가 생산자를 깨울 수 있도록 구현
+ */
 public class BoundedQueueV5 implements BoundedQueue {
 
     private final Lock lock = new ReentrantLock();

@@ -8,6 +8,9 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import static util.MyLogger.log;
 
+/**
+ * ReentrantLock과 Condition을 사용한 BoundedQueue
+ */
 public class BoundedQueueV4 implements BoundedQueue {
 
     private final Lock lock = new ReentrantLock();
