@@ -15,10 +15,10 @@ public class BoundedMain {
 //        BoundedQueue queue = new BoundedQueueV5(2);
 //        BoundedQueue queue = new BoundedQueueV6_1(2);
 //        BoundedQueue queue = new BoundedQueueV6_2(2);
-        BoundedQueue queue = new BoundedQueueV6_3(2);
+        BoundedQueue queue = new BoundedQueueV6_4(2);
 
-//        producerFirst(queue);
-        consumerFirst(queue);
+        producerFirst(queue);
+//        consumerFirst(queue);
 
     }
 
