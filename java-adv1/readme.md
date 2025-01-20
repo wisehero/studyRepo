@@ -363,3 +363,162 @@
 - 하지만 생각해보면 한 가지 애매한 상황이 있다. `future.get()`을 호출하는 요청 스레드(`main`)은 두 가지 상황을 만들어낸다.
 - Callable 작업을 처리하는 스레드 풀의 스레드가 작업을 완료 했거나, 완료하지 못했거나.
 - 만약 후자의 상황이라면 어떨까? 그리고 왜 결과를 바로 반환하지 않고 `Future`라는 객체를 대신 반환할까?
+
+### Future를 사용하는 이유
+
+- `ExecutorService` 객체의 `submit()`을 호출하면 전달된 Callable을 구현한 작업을 수행한다.
+- 이때 `submit()` 메서드를 호출했다하더라도 즉시 작업 수행 결과를 바로 받을 수는 없다. 왜냐하면 `submit()`이 작업 실행을 하는 것이 아니기 때문이다.
+- 작업 실행 시점은 스레드 풀의 스레드가 결정하는 것이다. 따라서 언제 실행이 완료되어서 결과를 반환할지 알 수 없다.
+- 이런 이유로 `ExecutorService.submit()` 메서드는 작업의 실행 결과를 나타내는 `Future` 객체를 반환한다.
+- `Future` 객체는 작업의 현재 상태를 조회하거나 작업의 실행이 완료되었을 때 결과를 가져올 수 있는 메서드를 제공한다.
+
+### future.get()을 호출했을 때
+
+- `Future`가 완료된 상태에서는 `Future`에 결과도 포함되어 있다. 이 경우 요청 스레드를 대기하지 않고 값을 즉시 반환받는다.
+- `Future`가 완료되지 않은 상태에서는 결과를 받기 위해 대기해야 한다. 이때 요청 스레드는 블로킹 상태가 된다.
+
+### 그런데 Future를 사용하면서 생기는 의문, 결과를 직접 받지 않는 이유?
+
+```java
+Future<Integer> future = es.submit(new MyCallable()); // 여기는 블로킹 아님
+Integer result = future.get();  // 여기는 블로킹
+```
+
+```java
+Integer result = es.submit(new MyCallable()).get(); // 여기는 블로킹
+```
+
+두 코드를 비교했을 때 아래처럼 하는게 더 단순하지 않을까? 결국 요청 스레드가 대기해야 하는 것은 똑같지 않은가?  
+하지만 아래의 코드를 보면 `Future`를 사용하는 이유를 알 수 있다.
+
+```java
+// future 반환
+Future<Integer> future1 = es.submit(task1); // 여기는 블로킹 아님
+Future<Integer> future2 = es.submit(task2); // 여기는 블로킹 아님
+Integer sum1 = future1.get(); // 여기서 블로킹
+Integer sum2 = future2.get(); // 여기서 블로킹
+
+// 바로 결과 반환
+Integer sum1 = es.submit(task1); // 여기서 블로킹
+Integer sum2 = es.submit(task2); // 여기서 블로킹
+```
+
+- `Future`를 사용하지 않을 경우 결과적으로 단일 스레드처럼 작동한다.
+- `Future`를 사용하면 작업을 동시에 실행할 수 있다. `Future`를 사용하면 작업을 동시에 실행하고 결과를 받을 수 있다.
+
+### `Future`를 잘못 사용하는 예
+
+```java
+Future<Integer> future1 = es.submit(task1); // non-blocking
+Integer sum1 = future1.get(); // blocking, 2초 대기
+Future<Integer> future2 = es.submit(task2); // non-blocking
+Integer sum2 = future2.get(); // blocking, 2초 대기
+
+Integer sum1 = es.submit(task1).get(); // get()에서 블로킹
+Integer sum2 = es.submit(task2).get(); // get()에서 블로킹
+```
+
+### `Future`가 제공하는 기능
+
+- `boolean cancel(boolean mayInterruptIfRunning)` : 작업을 취소한다.
+    - `mayInterruptIfRunning`이 `true`이면 현재 작업을 실행 중인 스레드를 인터럽트하고 작업을 취소한다.
+    - `false`이면 현재 작업을 실행 중인 스레드를 인터럽트하지 않고 작업을 취소한다. 이미 실행 중인 작업을 중단하지 않는다.
+    - 취소 상태의 `Future`에 `Future.get()`을 호출하면 `CancellationException`이 발생한다.
+- `boolean isCancelled()` : 작업이 취소되었는지 여부를 반환한다.
+    - 작업이 취소된 경우 `true`, 그렇지 않은 경우 `false`
+- `boolean isDone()` : 작업이 완료되었는지 여부를 반환한다.
+    - 작업이 완료된 경우 `true`, 그렇지 않은 경우 `false`
+- `State state()` : 작업의 상태를 반환한다.
+    - `State`는 `Future`의 내부 클래스로 작업의 상태를 나타낸다.
+    - JDK 19부터 지원한다.
+- `V get()` : 작업의 결과를 반환한다.
+    - 작업이 완료되지 않은 상태에서 `get()`을 호출하면 작업이 완료될 때까지 블로킹된다.
+- `V get(long timeout, TimeUnit unit)` : 작업의 결과를 반환한다.
+    - 작업이 완료되지 않은 상태에서 `get()`을 호출하면 작업이 완료될 때까지 블로킹된다.
+    - `timeout` 시간이 경과하면 `TimeoutException`이 발생한다.
+
+### ExecutorService - 작업 컬렉션 처리
+
+- invokeAll(), invokeAny() 메서드를 통해서 여러 작업을 동시에 처리할 수 있다.
+- `invokeAll()`은 모든 작업이 완료될 때까지 대기하고, `invokeAny()`는 가장 먼저 완료된 작업의 결과를 반환한다.
+
+### ExecutorService - 종료 메서드
+
+- `shutdown()` : 현재 진행 중인 작업을 완료한 뒤 스레드 풀을 종료한다. 논 블로킹 메서드다.
+- `shutdownNow()` : 현재 진행 중인 작업을 취소하고 스레드 풀을 종료한다. 논 블로킹 메서드다.
+- `awaitTermination()` : 모든 작업이 완료되거나 타임아웃이 발생할 때까지 대기한다. 블로킹 메서드다.
+
+### ExecutorService - 우아한 종료
+
+- `shutdown()`을 호출해서 이미 들어온 모든 작업을 처리하고 종료하는 것이 이상적이지만 그렇지 않은 경우도 있다.
+- 큐에 대기중인 작업이 너무 많거나, 너무 오래 걸리거나, 또는 버그가 발생해서 특정 작업이 끝나지 않을 수 있다.
+- 이럴 떄는 보통 종료하는 시간을 정한다. 예를 들어 60초까지는 작업을 다 처리할 수 있게 기다리는 것이다.
+- 그리고 60초가 지나면, 무언가 문제가 있다고 가정하고 `shutdownNow()`를 호출해서 강제로 종료한다.
+- `close()`의 경우 이렇게 구현되어 있다.
+
+### ExecutorService 스레드 풀 관리
+
+- `ExecutorService`의 기본 구현체인 `ThreadPoolExecutor`의 생성자는 다음 속성을 사용한다.
+    - corePoolSize : 항상 유지할 최소 스레드 수
+    - maximumPoolSize : 최대 스레드 수
+    - keepAliveTime : 추가 스레드가 corePoolSize보다 많이 있는 경우, 추가 스레드가 종료되기 전 대기할 시간
+    - BlockingQueue<Runnable> workQueue : 작업을 저장하는 큐
+- 작업을 요청하면 core 사이즈 만큼 스레드를 만든다.
+- core 사이즈를 초과하면 큐에 작업을 넣는다. 큐를 초과하면 max 사이즈 만큼 스레드를 만든다. 임시로 사용되는 초과 스레드가 생성된다.
+    - 큐가 가득차서 큐에 넣을 수도 없다. 초과 스레드가 바로 수행해야 한다.
+- max 사이즈를 초과하면 요청을 거절한다. 그리고 예외가 발생한다.
+
+### 스레드 미리 생성하기
+
+- `ThreadPoolExecutor.prestartAllCoreThreads()`를 사용하면 기본 스레드를 미리 생성할 수 있다.
+- `ExecutorService` 인터페이스에서 제공하는 기능이 아니기 때문에 형변환을 거쳐야 한다.
+
+### Executor 전략 - 고정 풀 전략
+
+- 자바는 `Executors` 클래스를 통해 3가지 기본 전력을 제공한다.
+- `newSingleThreadPool()` : 스레드를 하나만 사용하는 전략
+  - 스레드 풀에 기본 스레드 1개만 사용한다.
+  - 큐 사이즈에 제한이 없다.(LinkedBlockingQueue 사용)
+  - 주로 간단히 사용하거나 테스트 용도로 사용한다.
+- `newFixedThreadPool(nThreads)` : 스레드를 고정된 개수만큼 사용하는 전략
+  - 스레드 풀에 n개만큼의 기본 스레드를 생성한다. 초과 스레드는 생성하지 않는다.
+  - 큐 사이즈에 제한이 없다.
+  - 스레드 수가 고정되어 있기 때문에 CPU, 메모리 리소스가 어느정도 예측 가능한 안정적인 방식이다.
+  - 또한 스레드 수가 고정되어 있기 때문에 큐에 아무리 많이 작업이 가득차도 리소스 사용량이 확 늘어나지 않는다.
+  - 서비스 초기에는 사용자가 적어서 문제될 게 없지만, 갑작스런 요청량 증가나 사용자가 많아질 경우 문제가 될 수 있다.
+- `newCachedThreadPool()` : 캐시 스레드 풀 전략
+  - 기본 스레드를 사용하지 않고, 60초 생존 주기를 가진 초과 스레드만 사용한다.
+  - 초과 스레드의 수는 제한이 없다. 또한 큐에 작업을 저장하지 않는다.
+  - 대신에 생산자의 요청을 스레드 풀의 소비자 스레드가 직접 받아서 바로 처리한다.
+  - 모든 요청이 대기하지 않고 스레드가 바로바로 처리한다. 따라서 빠른 처리가 가능하다.
+
+### 캐시 스레드 풀 전략의 `SynchronousQueue`
+
+- BlockingQueue 인터페이스의 구현체 중 하나이다.
+- 이 큐는 내부에 저장 공간이 없다. 대신에 생산자의 작업을 소비자 스레드에게 직접 전달한다.
+- 쉽게 이야기해서 저장 공간의 크기가 0이고, 생산자 스레드가 큐가 작업을 전달하면 소비자 스레드가 큐에서 작업을 꺼낼 때까지 대기한다.
+- 소비자가 작업을 요청하면 기다리던 생산자가 소비자에게 직접 작업을 전달하고 반환된다. 그 반대의 경우도 같다.
+
+### 캐시 스레드 풀 전략 정리
+
+- 캐시 스레드 풀 전략은 매우 빠르고, 유연한 전략이다.
+- 기본 스레드도 없고, 대기 큐에 작업이 쌓이지도 않는다. 따라서 빠른 응답이 필요한 서비스에 적합하다.
+- 그런데 어떻게 기본 스레드 없이 초과 스레드만 만들 수 있을까?
+  - Executor의 스레드 풀 관리는 core가 없고 큐에 공간이 없으면 초과 스레드를 생성한다.
+  - 위 두 가지 정책에 모두 해당하기 때문에 캐시 스레드 풀 전략에서는 바로 초과 스레드를 만든다.
+  - 또한 큐 최대 스레드 갯수 제한이 없기 때문에 초과 스레드는 무한대로 만들어진다.
+  - 물론 이러한 점 때문에 컴퓨팅 리소스를 과다 점유하여 시스템이 다운될 수 있는 위험을 안고 있다.
+
+### Executor 예외 정책
+
+- `ThreadPoolExecutor`은 작업을 거절하는 다양한 정책을 제공한다.
+  - `ThreadPoolExecutor.AbortPolicy` : 기본 정책으로, 작업을 거절하고 예외를 발생시킨다.
+  - `ThreadPoolExecutor.DiscardPolicy` : 작업을 거절하고 아무런 처리를 하지 않는다.
+  - `ThreadPoolExecutor.CallerRunsPolicy` : 작업을 호출한 스레드에서 실행한다.
+  - 혹은 개발자가 직접 정의한 거절 정책을 사용할 수 있다.
+
+### 스레드 풀 전략 총 정리
+
+- 트래픽이 일정하고, 시스템 안정성이 중요한 서비스라면 고정 스레드 풀 전략을 사용
+- 일반적인 성장하는 서비스라면 캐시 스레드 풀 전략
+- 다양한 상황에 대응하려면 사용자 정의 풀 전략을 사용한다.
