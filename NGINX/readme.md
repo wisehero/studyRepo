@@ -74,3 +74,16 @@ $ sudo apt update
 $ sudo apt install nginx
 ```
 
+### Nginx의 설정 파일 위치
+```bash
+/etc/nginx/nginx.conf
+```
+
+### Nginx 명령어
+```bash
+# nginx -t : nginx 설정 파일의 문법을 검사한다.
+$ sudo nginx -t
+
+# nginx -s reload : nginx 설정 파일을 다시 읽어들인다.
+$ sudo nginx -s reload
+```
