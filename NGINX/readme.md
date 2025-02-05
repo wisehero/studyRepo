@@ -142,3 +142,22 @@ server {
 $ sudo nginx -t
 $ sudo nginx -s reload
 ```
+
+### Nginx로 Next.js 프로젝트 서비스하기
+```bash
+server {
+    listen       80; 
+    server_name  localhost;
+
+    location / {
+        root   /usr/share/nginx/nginx-frontend-next/out;
+        index  index.html;
+    }
+
+    error_page   500 502 503 504  /50x.html;
+    
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+}
+```
