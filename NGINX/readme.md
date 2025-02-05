@@ -93,3 +93,52 @@ $ sudo tail -f /var/log/nginx/access.log
 # 에러 메시지 확인
 $ sudo tail -f /var/log/nginx/error.log
 ```
+
+### nginx로 정적 파일 서비스하기 
+```bash
+sudo vi /etc/nginx/nginx.conf
+
+# nginx.conf 파일에 아래 내용 추가
+server {
+    listen 80;
+    server_name localhost;
+
+    location / {
+        root /usr/share/nginx/html;
+        index index.html;
+    }
+}
+# nginx 설정 파일 검사
+sudo nginx -t
+
+# nginx 설정 파일 다시 읽어들이기
+sudo nginx -s reload
+```
+
+### Nginx로 React + vite 서비스하기
+```bash
+# React 프로젝트가 위치한 곳으로 이동한 뒤에
+$ sudo npm i 
+$ sudo npm run build
+
+# nginx 설정 파일 수정
+$ sudo vi /etc/nginx/nginx.conf
+server {
+    listen       80; 
+    server_name  localhost;
+
+    location / {
+        root   /usr/share/nginx/nginx-frontend-react/dist;
+        index  index.html;
+    }
+
+    error_page   500 502 503 504  /50x.html;
+    
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+}
+
+$ sudo nginx -t
+$ sudo nginx -s reload
+```
