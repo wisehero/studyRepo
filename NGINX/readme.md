@@ -82,8 +82,14 @@ $ sudo apt install nginx
 ### Nginx 명령어
 ```bash
 # nginx -t : nginx 설정 파일의 문법을 검사한다.
-$ sudo nginx -t
+$ sudo nginx -t 
 
 # nginx -s reload : nginx 설정 파일을 다시 읽어들인다.
 $ sudo nginx -s reload
+
+# 제대로 요청이 들어오고 있는 지 확인
+$ sudo tail -f /var/log/nginx/access.log
+
+# 에러 메시지 확인
+$ sudo tail -f /var/log/nginx/error.log
 ```
