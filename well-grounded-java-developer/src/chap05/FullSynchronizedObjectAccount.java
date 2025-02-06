@@ -17,6 +17,21 @@ public class FullSynchronizedObjectAccount {
         return false;
     }
 
+    public synchronized boolean transferTo(FullSynchronizedObjectAccount other, int amount) {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        if (balance >= amount) {
+            balance = balance - amount;
+            other.deposit(amount);
+            return true;
+        }
+
+        return false;
+    }
+
     public synchronized void deposit(int amount) {
         balance = balance + amount;
     }
