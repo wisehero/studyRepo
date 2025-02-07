@@ -161,3 +161,25 @@ server {
     }
 }
 ```
+### Nginx로 여러 도메인 서비스하기
+```bash
+server {
+        listen 80;
+        server_name wisehero.p-e.kr;
+
+        location / {
+                root /usr/share/nginx/nginx-frontend-react/dist;
+                index index.html;
+        }
+}
+
+server {
+        listen 80;
+        server_name admin.wisehero.p-e.kr;
+
+        location / {
+                root /usr/share/nginx/nginx-frontend-next/out;
+                index index.html;
+        }
+}
+```
