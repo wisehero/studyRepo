@@ -1,6 +1,6 @@
 package inheritance;
 
-public class InHeritanceMain1 {
+public class InheritanceMain1 {
 	public static void main(String[] args) {
 		MyTestEx t = new MyTestEx();
 		System.out.println(t.getData()); // 10
