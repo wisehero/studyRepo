@@ -1,4 +1,6 @@
 management:
+  server:
+    port: 8081
   endpoint:
     health:
       show-components: always
@@ -6,6 +8,7 @@ management:
     web:
       exposure:
         include: "*"
+      base-path: /wisehero # http://localhost:8081/wisehero/actuator? ??????.
 
 logging:
   level:
