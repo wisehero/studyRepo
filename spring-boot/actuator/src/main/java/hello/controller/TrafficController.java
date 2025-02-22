@@ -50,4 +50,10 @@ public class TrafficController {
 		// conn.close();
 		return "ok";
 	}
+
+	@GetMapping("/error-log")
+	public String errorLog() {
+		log.error("error log");
+		return "ok";
+	}
 }
