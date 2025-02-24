@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +27,6 @@ public class PaymentController {
 	@PostMapping("/portone")
 	public ResponseEntity<String> savePortone(@RequestBody PaymentRequest request) {
 		try {
-			System.out.println(request);
 			paymentService.savePayment(Payment.of(request));
 			return ResponseEntity.ok("Payment processed successfully");
 		} catch (Exception e) {
@@ -43,5 +43,11 @@ public class PaymentController {
 	public ResponseEntity<List<Payment>> getAllPayments() {
 		List<Payment> payments = paymentService.getAllPayments();
 		return ResponseEntity.ok(payments);
+	}
+
+	@GetMapping("/cancel/{uid}")
+	public ResponseEntity<String> cancelPayment(@PathVariable("uid")String uid) {
+		paymentService.cancelPayment(uid);
+		return ResponseEntity.ok("Payment cancle processed successfully.");
 	}
 }

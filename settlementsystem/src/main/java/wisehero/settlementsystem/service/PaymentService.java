@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import wisehero.settlementsystem.client.PaymentClient;
 import wisehero.settlementsystem.entity.Payment;
 import wisehero.settlementsystem.repository.PaymentRepository;
 
@@ -14,6 +15,8 @@ import wisehero.settlementsystem.repository.PaymentRepository;
 public class PaymentService {
 
 	private final PaymentRepository paymentRepository;
+
+	private final PaymentClient paymentClient;
 
 	/**
 	 * 모든 결제 내역 조회
@@ -34,6 +37,21 @@ public class PaymentService {
 	public Payment savePayment(Payment payment) {
 		System.out.println(payment);
 		return paymentRepository.save(payment);
+	}
+
+	@Transactional
+	public void cancelPayment(String uid) {
+		// 외부 API로 결제 취소 요청
+		String result = paymentClient.cancelPayment(uid);
+
+		if (result.contains("ERROR")) {
+			throw new RuntimeException("Payment cancellation failed during recovery process.");
+		}
+
+		Payment payment = paymentRepository.findByImpUid(uid)
+			.orElseThrow(() -> new IllegalArgumentException("Payment not found with impUid: " + uid));
+
+		payment.setStatus("cancel");
 	}
 
 }

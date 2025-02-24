@@ -17,16 +17,14 @@ function generateMerchantUid() {
     var milliseconds = today.getMilliseconds(); // 밀리초
 
     // 시, 분, 초, 밀리초를 결합하여 고유한 문자열 생성
-    var makeMerchantUid = `${hours}${minutes}${seconds}${milliseconds}`;
-
-    return makeMerchantUid;
+    return `${hours}${minutes}${seconds}${milliseconds}`;
 }
 
 
 function paymentProcess() {
     if (confirm("구매 하시겠습니까?")) {
         if (isLogin) { // 회원만 결제 가능
-            IMP.init("imp34428218"); // 가맹점 식별코드
+            IMP.init("imp66845048"); // 가맹점 식별코드
             IMP.request_pay({
                 pg: 'kakaopay.TC0ONETIME', // PG사 코드표에서 선택
                 pay_method: 'card', // 결제 방식
