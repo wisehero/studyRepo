@@ -11,8 +11,8 @@ Nginx는 다양한 기능을 가지고 있다.
 - 캐싱
 - 보안 처리(IP 차단, 요청 수 제한)
 
-
 ### Apache가 아닌 Nginx를 쓰는 이유?
+
 간단하게 말하면, Nginx를 더 많이 사용하는 이유는 Apache에 비해 훨씬 많은 트래픽을 처리할 수 있는 구조를 가지고 있기 때문이다.  
 https://www.youtube.com/watch?v=6FAwAXXj5N0&t=799s
 
@@ -21,6 +21,7 @@ https://www.youtube.com/watch?v=6FAwAXXj5N0&t=799s
 ## Nginx 다루기
 
 ### 아마존 리눅스에서 설치
+
 ```bash
 # 패키지 리스트 최신화
 sudo dnf update -y
@@ -51,6 +52,7 @@ sudo systemctl enable nginx
 ```
 
 ### 우분투에서 설치
+
 ```bash
 # apt에서 설치 가능한 패키지 리스트(최신 패키지, 버전 등)를 최신화시킨다.
 # apt는 리눅스에서 사용되는 소프트웨어 패키지를 설치 및 관리할 수 있게 도와주는 툴이다.
@@ -75,11 +77,13 @@ $ sudo apt install nginx
 ```
 
 ### Nginx의 설정 파일 위치
+
 ```bash
 /etc/nginx/nginx.conf
 ```
 
 ### Nginx 명령어
+
 ```bash
 # nginx -t : nginx 설정 파일의 문법을 검사한다.
 $ sudo nginx -t 
@@ -94,7 +98,8 @@ $ sudo tail -f /var/log/nginx/access.log
 $ sudo tail -f /var/log/nginx/error.log
 ```
 
-### nginx로 정적 파일 서비스하기 
+### nginx로 정적 파일 서비스하기
+
 ```bash
 sudo vi /etc/nginx/nginx.conf
 
@@ -116,6 +121,7 @@ sudo nginx -s reload
 ```
 
 ### Nginx로 React + vite 서비스하기
+
 ```bash
 # React 프로젝트가 위치한 곳으로 이동한 뒤에
 $ sudo npm i 
@@ -144,6 +150,7 @@ $ sudo nginx -s reload
 ```
 
 ### Nginx로 Next.js 프로젝트 서비스하기
+
 ```bash
 server {
     listen       80; 
@@ -161,7 +168,9 @@ server {
     }
 }
 ```
+
 ### Nginx로 여러 도메인 서비스하기
+
 ```bash
 server {
         listen 80;
@@ -184,3 +193,37 @@ server {
 }
 ```
 
+---
+
+## 프록시란?
+
+프록시란 중계의 의미를 가진다. 그러면 프록시 서버는 중간 역할을 해주는 서버다.
+
+![img.png](images/proxy.png)
+
+### 포워드 프록시란?
+
+**보내려고 하는 요청을 관리 또는 보안 처리를 위한 용도로 사용하는 서버를 포워드 프록시 서버라고 얘기를 한다.**  
+포워드 프록시 서버의 대표적인 예시로 회사 방화벽이 있다. 회사 내부에 있는 컴퓨터로 ChatGPT에 접속하려는데 차단되는  
+경우가 있다. 포워드 프록시 서버가 보내려고 하는 요청을 감시하면서 위험하다고 판단되는 사이트에 접속하지 못하게 차단하는 것이다.
+
+![forward-proxy.png](images/forward-proxy.png)
+
+### 리버스 프록시란?
+
+들어오는 요청을 관리 또는 보안 처리를 하기 위한 용도로 사용하는 서버를 리버스 프록시 서버라고 한다.  
+리버스 프록시 서버의 대표적인 예시가 HTTPS 처리, 요청 수 제한, 로드 밸런싱을 하는 용도로 사용하는 Nginx가 있다.  
+리버스 프록시 서버가 들어오는 요청의 보안 처리를 하기 위해 HTTPS 처리를 한다. 그리고 들어오는 요청을 감시하다가  
+일정 요청 수 이상을 보낼 때도 차단을 하게끔 설정할 수 있다. 또한 들어오는 요청을 여러 대의 서버로 분배해주는 역할인  
+로드밸런싱 기능을 하게끔 셋팅할 수 있다.
+
+![reverse-proxy.png](images/reverse-proxy.png)
+
+---
+
+## 로드밸런서
+
+서비스를 운영하다보면 점점 많은 트래픽이 발생해 한 대의 서버로는 사양이 부족한 경우가 발생하게 된다.  
+이걸 해결하기 위해 위와 같이 서버를 여러 대로 늘려서 서버를 운영한다. 하지만 사용자보고 여러 서버에 골고루 알아서  
+요청을 보내라고 시킬 수는 없다. 사용자의 요청을 여러 대의 웹 애플리케이션 서버에 골고루 전달하기 위한 장치가 필요하다.  
+그게 바로 로드 밸런서다.
