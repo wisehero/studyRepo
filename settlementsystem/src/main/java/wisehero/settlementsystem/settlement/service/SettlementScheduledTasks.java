@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import wisehero.settlementsystem.payment.entity.Payment;
@@ -27,6 +29,7 @@ public class SettlementScheduledTasks {
 	private final SettlementRepository settlementRepository;
 
 	@Scheduled(cron = "0 * * * * *")
+	@SchedulerLock(name = "ScheduledTask_run")
 	public void dailySettlement() {
 		// 어제 날짜 가져오기
 		LocalDate yesterday = LocalDate.now().minusDays(1);
