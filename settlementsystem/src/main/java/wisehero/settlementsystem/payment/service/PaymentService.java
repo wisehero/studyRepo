@@ -1,4 +1,4 @@
-package wisehero.settlementsystem.service;
+package wisehero.settlementsystem.payment.service;
 
 import java.util.List;
 
@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import wisehero.settlementsystem.client.PaymentClient;
-import wisehero.settlementsystem.entity.Payment;
-import wisehero.settlementsystem.repository.PaymentRepository;
+import wisehero.settlementsystem.payment.client.PaymentClient;
+import wisehero.settlementsystem.payment.entity.Payment;
+import wisehero.settlementsystem.payment.repository.PaymentRepository;
 
 @Service
 @RequiredArgsConstructor

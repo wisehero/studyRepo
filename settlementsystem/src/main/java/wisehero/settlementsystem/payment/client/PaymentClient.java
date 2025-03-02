@@ -1,4 +1,4 @@
-package wisehero.settlementsystem.client;
+package wisehero.settlementsystem.payment.client;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -16,7 +16,7 @@ import org.springframework.web.client.RestClientException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import wisehero.settlementsystem.service.PortOneRequestUrl;
+import wisehero.settlementsystem.payment.service.PortOneRequestUrl;
 
 @Component
 @RequiredArgsConstructor

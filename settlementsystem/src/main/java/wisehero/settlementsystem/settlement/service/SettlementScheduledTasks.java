@@ -7,14 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import wisehero.settlementsystem.entity.Payment;
-import wisehero.settlementsystem.repository.PaymentRepository;
+import wisehero.settlementsystem.payment.entity.Payment;
+import wisehero.settlementsystem.payment.repository.PaymentRepository;
 import wisehero.settlementsystem.settlement.entity.Settlement;
 import wisehero.settlementsystem.settlement.repository.SettlementRepository;
 

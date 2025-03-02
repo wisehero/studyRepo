@@ -1,4 +1,4 @@
-package wisehero.settlementsystem.service;
+package wisehero.settlementsystem.payment.service;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

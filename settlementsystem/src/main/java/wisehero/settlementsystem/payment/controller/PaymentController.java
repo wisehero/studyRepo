@@ -1,4 +1,4 @@
-package wisehero.settlementsystem.controller;
+package wisehero.settlementsystem.payment.controller;
 
 import java.util.List;
 
@@ -9,13 +9,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-import wisehero.settlementsystem.controller.request.PaymentRequest;
-import wisehero.settlementsystem.entity.Payment;
-import wisehero.settlementsystem.service.PaymentService;
+import wisehero.settlementsystem.payment.controller.request.PaymentRequest;
+import wisehero.settlementsystem.payment.entity.Payment;
+import wisehero.settlementsystem.payment.service.PaymentService;
 
 @RestController
 @RequestMapping("/api/payment")

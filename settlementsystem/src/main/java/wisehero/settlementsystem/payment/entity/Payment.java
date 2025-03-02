@@ -1,4 +1,4 @@
-package wisehero.settlementsystem.entity;
+package wisehero.settlementsystem.payment.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -15,7 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import wisehero.settlementsystem.controller.request.PaymentRequest;
+import wisehero.settlementsystem.payment.controller.request.PaymentRequest;
 
 @Data
 @Builder

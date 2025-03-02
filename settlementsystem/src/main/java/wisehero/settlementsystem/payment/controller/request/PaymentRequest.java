@@ -1,4 +1,4 @@
-package wisehero.settlementsystem.controller.request;
+package wisehero.settlementsystem.payment.controller.request;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

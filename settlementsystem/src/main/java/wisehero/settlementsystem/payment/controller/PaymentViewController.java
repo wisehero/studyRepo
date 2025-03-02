@@ -1,4 +1,4 @@
-package wisehero.settlementsystem.controller;
+package wisehero.settlementsystem.payment.controller;
 
 import java.util.List;
 
@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import lombok.RequiredArgsConstructor;
-import wisehero.settlementsystem.entity.Payment;
-import wisehero.settlementsystem.service.PaymentService;
+import wisehero.settlementsystem.payment.entity.Payment;
+import wisehero.settlementsystem.payment.service.PaymentService;
 
 @Controller
 @RequiredArgsConstructor
