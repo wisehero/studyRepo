@@ -1,28 +1,24 @@
 package methodref;
 
 import java.util.List;
+import java.util.function.BiFunction;
 
 import lambda.lambda5.stream.MyStreamV3;
 
 public class MethodRefEx6 {
 
 	public static void main(String[] args) {
-		List<Person> personList = List.of(
-			new Person("Kim"),
-			new Person("Lee"),
-			new Person("Park")
-		);
+		// 4. 임의 객체의 인스턴스 메서드 참조(특정 타입의)
+		Person person = new Person("Kim");
+		// 람다
+		BiFunction<Person, Integer, String> fun1 =
+			(Person p, Integer number) -> p.introduceWithNumber(number);
+		System.out.println("person.introduceWithNumber = " + fun1.apply(person, 1));
 
-		List<String> result1 = MyStreamV3.of(personList)
-			.map(person -> person.introduce())
-			.map(str -> str.toUpperCase())
-			.toList();
-		System.out.println("result1 = " + result1);
-
-		List<String> result2 = MyStreamV3.of(personList)
-			.map(Person::introduce)
-			.map(String::toUpperCase)
-			.toList();
-		System.out.println("result2 = " + result2);
+		// 메서드 참조, 타입이 첫 번째 매개변수가 됨, 그리고 첫 번째 매개변수의 메서드를 호출
+		// 나머지는 순서대로 매개변수에 전달
+		// 타입::메서드명
+		BiFunction<Person, Integer, String> fun2 = Person::introduceWithNumber;
+		System.out.println("person.introduceWithNumber = " + fun1.apply(person, 1));
 	}
 }
