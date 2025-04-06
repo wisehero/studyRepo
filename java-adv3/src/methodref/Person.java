@@ -20,10 +20,6 @@ public class Person {
 	}
 
 	// 정적 메서드, 매개변수
-	public static String greeting(String name) {
-		return "Hello, " + name;
-	}
-
 	public static String greetingWithName(String name) {
 		return "Hello, " + name;
 	}
@@ -32,10 +28,12 @@ public class Person {
 		return name;
 	}
 
+	// 인스턴스 메서드
 	public String introduce() {
 		return "I am " + name;
 	}
 
+	// 매개변수가 있는 인스턴스 메서드
 	public String introduceWithNumber(int number) {
 		return "I am " + name + ", my number is " + number;
 	}
