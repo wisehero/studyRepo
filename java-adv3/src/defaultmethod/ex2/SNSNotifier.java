@@ -1,0 +1,11 @@
+package defaultmethod.ex2;
+
+public class SNSNotifier implements Notifier {
+
+    @Override
+    public void notify(String message) {
+        System.out.println("[SNS]" + message);
+    }
+
+
+}
